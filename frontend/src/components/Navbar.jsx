@@ -8,6 +8,7 @@ import {
   LogOut,
   Menu,
   Sparkles,
+  Trophy,
   User,
   UserPlus,
   X,
@@ -55,6 +56,10 @@ const Navbar = () => {
         <NavLink to="/problems" onClick={closeMobile}>
           <List size={16} />
           Problems
+        </NavLink>
+        <NavLink to="/leaderboard" onClick={closeMobile}>
+          <Trophy size={16} />
+          Leaderboard
         </NavLink>
 
         {isAuthenticated ? (

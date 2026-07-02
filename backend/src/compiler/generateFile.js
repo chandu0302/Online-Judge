@@ -15,6 +15,11 @@ const ensureDirectory = (directoryPath) => {
   }
 };
 
+const extractJavaClassName = (code) => {
+  const match = code.match(/public\s+(?:final\s+|abstract\s+)?class\s+([A-Za-z_$][A-Za-z0-9_$]*)/);
+  return match ? match[1] : "Main";
+};
+
 const generateFile = async ({ language, code }) => {
   const extension = extensionMap[language];
 
@@ -29,7 +34,7 @@ const generateFile = async ({ language, code }) => {
   const jobDir = path.join(codesDir, jobId);
   ensureDirectory(jobDir);
 
-  const fileName = language === "java" ? "Main.java" : `${jobId}.${extension}`;
+  const fileName = language === "java" ? `${extractJavaClassName(code)}.java` : `${jobId}.${extension}`;
   const filePath = path.join(jobDir, fileName);
 
   fs.writeFileSync(filePath, code);

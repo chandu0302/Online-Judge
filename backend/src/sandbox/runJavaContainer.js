@@ -13,6 +13,8 @@ const { runInSandbox } = require("./createContainer");
  */
 const runJavaContainer = async (codeFilePath, inputFilePath = null, timeoutMs = 4000) => {
   const jobDir = path.dirname(codeFilePath);
+  const filename = path.basename(codeFilePath);
+  const className = path.basename(codeFilePath, ".java");
   const runShPath = path.join(jobDir, "run.sh");
 
   // If inputFilePath is null, use an empty temp input
@@ -28,12 +30,12 @@ const runJavaContainer = async (codeFilePath, inputFilePath = null, timeoutMs = 
   // Class output goes to /tmp to avoid root directory write permission blocks
   // Enforces 128m maximum heap limit for JVM execution to fit in 256MB container RAM
   const scriptContent = `#!/bin/bash
-javac -d /tmp /app/src/Main.java 2> /tmp/compile_err.txt
+javac -d /tmp /app/src/${filename} 2> /tmp/compile_err.txt
 if [ $? -ne 0 ]; then
   cat /tmp/compile_err.txt >&2
   exit 100
 fi
-java -Xmx128m -cp /tmp Main < /app/input.txt
+java -Xmx128m -cp /tmp ${className} < /app/input.txt
 `.replace(/\r\n/g, "\n");
 
   fs.writeFileSync(runShPath, scriptContent);

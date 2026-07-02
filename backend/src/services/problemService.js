@@ -76,6 +76,8 @@ const buildProblemData = (payload, creatorId) => {
     difficulty: payload.difficulty,
     tags: normalizeTags(payload.tags),
     examples: Array.isArray(payload.examples) ? payload.examples : [],
+    starterCode: payload.starterCode || {},
+    sampleInput: payload.sampleInput || "",
     isPublished:
       typeof payload.isPublished === "boolean" ? payload.isPublished : false,
   };
@@ -155,7 +157,12 @@ const getProblemById = async (problemId) => {
     throw new ApiError(404, "Problem not found");
   }
 
-  return problem;
+  const problemObject = problem.toObject();
+  if (!problemObject.sampleInput) {
+    problemObject.sampleInput = problemObject.examples?.[0]?.input || "";
+  }
+
+  return problemObject;
 };
 
 const updateProblem = async (problemId, payload) => {
@@ -175,6 +182,8 @@ const updateProblem = async (problemId, payload) => {
     "constraints",
     "difficulty",
     "examples",
+    "starterCode",
+    "sampleInput",
     "isPublished",
   ];
 

@@ -75,6 +75,16 @@ const problemSchema = new mongoose.Schema(
       type: [exampleSchema],
       default: [],
     },
+    starterCode: {
+      cpp: { type: String, trim: true, default: "" },
+      java: { type: String, trim: true, default: "" },
+      python: { type: String, trim: true, default: "" },
+    },
+    sampleInput: {
+      type: String,
+      trim: true,
+      default: "",
+    },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

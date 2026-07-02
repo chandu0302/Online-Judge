@@ -4,10 +4,19 @@ import { runCode } from "../../services/compilerService.js";
 import { submitSolution, getMySubmissions, getSubmissionById } from "../../services/submissionService.js";
 import { requestAIReview } from "../../services/aiService.js";
 import ReactMarkdown from "react-markdown";
-import Editor from "@monaco-editor/react";
+import Editor, { loader } from "@monaco-editor/react";
+import * as monaco from "monaco-editor";
+import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
 import { getErrorMessage } from "../../utils/getErrorMessage.js";
 import useAuth from "../../hooks/useAuth.js";
 import { Link } from "react-router-dom";
+
+// Load Monaco from the local bundle instead of fetching it from a CDN at
+// runtime, so the editor doesn't depend on external network reachability.
+self.MonacoEnvironment = {
+  getWorker: () => new editorWorker(),
+};
+loader.config({ monaco });
 
 const starterCode = {
   cpp: `#include <iostream>
@@ -34,17 +43,11 @@ print(a + b)
 `,
 };
 
-const starterInput = {
-  cpp: "5 10",
-  java: "5 10",
-  python: "5 10",
-};
-
 const CompilerWorkspace = ({ problemId, problem }) => {
   const { isAuthenticated } = useAuth();
   const [language, setLanguage] = useState("cpp");
-  const [code, setCode] = useState(starterCode.cpp);
-  const [input, setInput] = useState(starterInput.cpp);
+  const [code, setCode] = useState(problem?.starterCode?.cpp || starterCode.cpp);
+  const [input, setInput] = useState(problem?.sampleInput || "");
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
   const [isRunning, setIsRunning] = useState(false);
@@ -129,8 +132,8 @@ const CompilerWorkspace = ({ problemId, problem }) => {
   const handleLanguageChange = (event) => {
     const nextLanguage = event.target.value;
     setLanguage(nextLanguage);
-    setCode(starterCode[nextLanguage]);
-    setInput(starterInput[nextLanguage]);
+    setCode(problem?.starterCode?.[nextLanguage] || starterCode[nextLanguage]);
+    setInput(problem?.sampleInput || "");
     setOutput("");
     setError("");
     setLastSubmissionResult(null);
@@ -281,7 +284,7 @@ const CompilerWorkspace = ({ problemId, problem }) => {
             </label>
           </div>
 
-          <label className="code-editor-label">
+          <div className="code-editor-label">
              <span>Code Editor</span>
               <div className="monaco-editor-wrapper">
                 <Editor
@@ -307,7 +310,7 @@ const CompilerWorkspace = ({ problemId, problem }) => {
                   }}
                 />
               </div>
-           </label>
+           </div>
 
           <div className="editor-controls-pane">
             <label className="program-input-label">
