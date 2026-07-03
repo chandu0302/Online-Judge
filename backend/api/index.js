@@ -12,7 +12,7 @@ const ensureDbConnected = async () => {
     throw new Error("MONGODB_URI is not configured");
   }
 
-  await mongoose.connect(process.env.MONGODB_URI);
+  await mongoose.connect(process.env.MONGODB_URI, { dbName: "test" });
   console.log(`[DB] Connected to database: "${mongoose.connection.name}"`);
 };
 

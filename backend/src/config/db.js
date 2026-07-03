@@ -6,7 +6,7 @@ const connectDB = async () => {
       throw new Error("MONGODB_URI is not configured");
     }
 
-    await mongoose.connect(process.env.MONGODB_URI);
+    await mongoose.connect(process.env.MONGODB_URI, { dbName: "test" });
     console.log("MongoDB connected successfully");
   } catch (error) {
     console.error("MongoDB connection failed:", error.message);
