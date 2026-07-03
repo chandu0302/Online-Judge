@@ -13,6 +13,7 @@ const ensureDbConnected = async () => {
   }
 
   await mongoose.connect(process.env.MONGODB_URI);
+  console.log(`[DB] Connected to database: "${mongoose.connection.name}"`);
 };
 
 module.exports = async (req, res) => {
