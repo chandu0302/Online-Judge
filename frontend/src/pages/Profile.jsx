@@ -4,12 +4,14 @@ import { FileText } from "lucide-react";
 import useAuth from "../hooks/useAuth.js";
 import { getUserProfile } from "../services/authService.js";
 import { getMySubmissions } from "../services/submissionService.js";
+import { getMyStanding } from "../services/leaderboardService.js";
 import { getErrorMessage } from "../utils/getErrorMessage.js";
 
 const Profile = () => {
   const { user: contextUser } = useAuth();
   const [profile, setProfile] = useState(contextUser);
   const [submissions, setSubmissions] = useState([]);
+  const [standing, setStanding] = useState(null);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
@@ -17,12 +19,14 @@ const Profile = () => {
     const fetchProfileAndSubmissions = async () => {
       try {
         setError("");
-        const [profileRes, submissionsRes] = await Promise.all([
+        const [profileRes, submissionsRes, standingRes] = await Promise.all([
           getUserProfile(),
           getMySubmissions(),
+          getMyStanding(),
         ]);
         setProfile(profileRes.data);
         setSubmissions(submissionsRes.data);
+        setStanding(standingRes.data);
       } catch (apiError) {
         setError(getErrorMessage(apiError));
       } finally {
@@ -51,8 +55,6 @@ const Profile = () => {
         return "verdict-badge";
     }
   };
-
-  const acceptedCount = submissions.filter((s) => s.verdict === "Accepted").length;
 
   if (isLoading) {
     return (
@@ -86,12 +88,31 @@ const Profile = () => {
           <span className="stat-label">Total Submissions</span>
         </div>
         <div className="stat-card">
-          <span className="stat-num">{acceptedCount}</span>
-          <span className="stat-label">Accepted Solutions</span>
+          <span className="stat-num">{standing?.problemsSolved ?? 0}</span>
+          <span className="stat-label">Problems Solved</span>
         </div>
         <div className="stat-card">
-          <span className="stat-num">{profile?.role || "—"}</span>
-          <span className="stat-label">Account Role</span>
+          <span className="stat-num">{standing?.score ?? 0}</span>
+          <span className="stat-label">Score</span>
+        </div>
+        <div className="stat-card">
+          <span className="stat-num">{standing?.rank ? `#${standing.rank}` : "Unranked"}</span>
+          <span className="stat-label">Leaderboard Rank</span>
+        </div>
+      </section>
+
+      <section className="stats-row">
+        <div className="stat-card stat-easy">
+          <span className="stat-num">{standing?.breakdown?.easy ?? 0}</span>
+          <span className="stat-label">Easy Solved</span>
+        </div>
+        <div className="stat-card stat-medium">
+          <span className="stat-num">{standing?.breakdown?.medium ?? 0}</span>
+          <span className="stat-label">Medium Solved</span>
+        </div>
+        <div className="stat-card stat-hard">
+          <span className="stat-num">{standing?.breakdown?.hard ?? 0}</span>
+          <span className="stat-label">Hard Solved</span>
         </div>
       </section>
 
@@ -105,10 +126,6 @@ const Profile = () => {
           <div className="profile-stat-item">
             <span className="profile-stat-label">Email Address</span>
             <strong className="profile-stat-value">{profile?.email}</strong>
-          </div>
-          <div className="profile-stat-item">
-            <span className="profile-stat-label">System Role</span>
-            <strong className="profile-stat-value">{profile?.role}</strong>
           </div>
           <div className="profile-stat-item">
             <span className="profile-stat-label">Joined Since</span>

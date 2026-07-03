@@ -7,3 +7,9 @@ export const getLeaderboard = async ({ page = 1, limit = 50 } = {}) => {
 
   return response.data;
 };
+
+export const getMyStanding = async () => {
+  const response = await apiClient.get("/api/leaderboard/me");
+
+  return response.data;
+};

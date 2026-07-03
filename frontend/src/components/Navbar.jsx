@@ -7,7 +7,6 @@ import {
   LogIn,
   LogOut,
   Menu,
-  Sparkles,
   Trophy,
   User,
   UserPlus,
@@ -64,17 +63,9 @@ const Navbar = () => {
 
         {isAuthenticated ? (
           <>
-            <span className="nav-user">
-              <User size={14} />
-              {user?.name}
-            </span>
-            <NavLink to="/ai-reviews" onClick={closeMobile}>
-              <Sparkles size={16} />
-              AI Reviews
-            </NavLink>
             <NavLink to="/profile" onClick={closeMobile}>
               <User size={16} />
-              Profile
+              {user?.name || "Profile"}
             </NavLink>
             <button className="link-button" type="button" onClick={handleLogout}>
               <LogOut size={16} />

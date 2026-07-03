@@ -23,25 +23,25 @@ const features = [
     icon: Code2,
     title: "Monaco Code Editor",
     description:
-      "Write your solutions in C++, Java, or Python inside a fully featured Monaco editor, equipped with syntax highlighting and auto-tabbing.",
+      "Write C++, Java, or Python in a fully featured Monaco editor with syntax highlighting and smart auto-tabbing.",
   },
   {
     icon: Container,
     title: "Docker Sandbox Security",
     description:
-      "Solutions are built and executed inside secure, isolated Linux containers, protecting system resources and ensuring robust performance metrics.",
+      "Every submission builds and runs inside an isolated Linux container, keeping execution safe and measurements accurate.",
   },
   {
     icon: Bot,
     title: "Gemini Code Reviewer",
     description:
-      "Stuck on an algorithm or complexity? Request an automated AI review to get instant feedback on bugs, efficiency, and edge cases.",
+      "Stuck on an algorithm? Request an automated AI review for instant feedback on bugs, efficiency, and edge cases.",
   },
   {
     icon: BarChart3,
     title: "Execution Analytics",
     description:
-      "Track test case passes, exact memory footprints, execution times, compiler outputs, and complete submission histories in real-time.",
+      "Track test case results, memory footprint, execution time, compiler output, and your full submission history in real-time.",
   },
 ];
 
@@ -65,9 +65,9 @@ const Home = () => {
           <span>Online Judge Platform</span>
         </h1>
         <p className="hero-subtitle">
-          Practice standard data structures and algorithms, compile solutions
-          instantly inside isolated Docker sandboxes, and receive smart, deep AI
-          reviews of your code.
+          Practice data structures and algorithms, compile and run your code
+          instantly inside isolated Docker sandboxes, and get smart AI-powered
+          feedback on every submission.
         </p>
 
         <div className="hero-cta-buttons">
@@ -96,7 +96,7 @@ const Home = () => {
         {[
           { num: "< 100ms", label: "Compile & Execute Speed" },
           { num: "100%", label: "Isolated Docker Sandbox" },
-          { num: "Gemini 1.5", label: "AI Code Review Agent" },
+          { num: "3 Languages", label: "C++, Java & Python Supported" },
         ].map((stat, i) => (
           <motion.div
             key={stat.label}
