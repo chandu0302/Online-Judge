@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs");
-const { v4: uuidv4 } = require("uuid");
+const { randomUUID } = require("crypto");
 const runCppContainer = require("../sandbox/runCppContainer");
 const runPythonContainer = require("../sandbox/runPythonContainer");
 const runJavaContainer = require("../sandbox/runJavaContainer");
@@ -12,7 +12,7 @@ if (!fs.existsSync(codesDir)) fs.mkdirSync(codesDir);
 if (!fs.existsSync(inputsDir)) fs.mkdirSync(inputsDir);
 
 const runTest = async (name, lang, code, expectedVerdict) => {
-  const jobId = uuidv4();
+  const jobId = randomUUID();
   const jobDir = path.join(codesDir, jobId);
   fs.mkdirSync(jobDir);
 

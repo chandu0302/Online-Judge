@@ -1,5 +1,5 @@
 const { exec } = require("child_process");
-const { v4: uuidv4 } = require("uuid");
+const { randomUUID } = require("crypto");
 const path = require("path");
 const fs = require("fs");
 
@@ -49,7 +49,7 @@ const ensureDockerReady = async () => {
  */
 const runInSandbox = (jobDir, inputFilePath, timeoutMs = 2000) => {
   return new Promise((resolve, reject) => {
-    const containerName = `oj-sandbox-${uuidv4()}`;
+    const containerName = `oj-sandbox-${randomUUID()}`;
 
     // Normalize paths for Docker Desktop on Windows
     const dockerJobDir = normalizeDockerPath(jobDir);
