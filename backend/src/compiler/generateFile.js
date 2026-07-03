@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { randomUUID } = require("crypto");
 
 const extensionMap = {
   cpp: "cpp",
@@ -29,8 +30,7 @@ const generateFile = async ({ language, code }) => {
 
   ensureDirectory(codesDir);
 
-  const { v4: uuid } = await import("uuid");
-  const jobId = uuid();
+  const jobId = randomUUID();
   const jobDir = path.join(codesDir, jobId);
   ensureDirectory(jobDir);
 

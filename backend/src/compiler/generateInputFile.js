@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { randomUUID } = require("crypto");
 
 const inputsDir = path.join(__dirname, "../../inputs");
 
@@ -12,8 +13,7 @@ const ensureDirectory = (directoryPath) => {
 const generateInputFile = async (input = "") => {
   ensureDirectory(inputsDir);
 
-  const { v4: uuid } = await import("uuid");
-  const filePath = path.join(inputsDir, `${uuid()}.txt`);
+  const filePath = path.join(inputsDir, `${randomUUID()}.txt`);
 
   fs.writeFileSync(filePath, input ?? "");
 
