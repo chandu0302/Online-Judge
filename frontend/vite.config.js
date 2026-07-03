@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:5000",
+        target: "online-judge-m6vtxwo6z-chandu0302.vercel.app",
         changeOrigin: true,
       },
     },
